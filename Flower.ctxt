@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Flower
+comment0.text=\r\n\ The\ Flower\ Class.\ A\ flower\ simply\ waits\ to\ be\ nibbled\ on\ and\r\n\ grants\ hp\ to\ bugs\ that\ nibble\ it\ until\ it\ has\ no\ nibbles\ left\ \r\n\ to\ give,\ at\ which\ point\ it\ removes\ itself\ from\ the\ World\r\n\ \r\n\ @author\ Jordan\ Cohen\ \r\n\ @version\ Feb\ 2017\r\n
+comment1.params=
+comment1.target=Flower()
+comment2.params=w
+comment2.target=void\ addedToWorld(greenfoot.World)
+comment3.params=
+comment3.target=void\ act()
+comment3.text=\r\n\ Act\ -\ do\ whatever\ the\ Flower\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+comment4.params=
+comment4.target=int\ nibble()
+comment4.text=\r\n\ Take\ a\ bite\ out\ of\ this\ Flower.\ \r\n\ \r\n\ @return\ int\ \ The\ amount\ of\ HP\ that\ has\ been\ consumed\r\n
+comment5.params=
+comment5.target=void\ checkAndRemove()
+numComments=6

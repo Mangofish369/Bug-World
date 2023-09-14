@@ -1,0 +1,201 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.ArrayList;
+
+/**
+ * A bug that seeks out food. 
+ * 
+ * @author Mr. Cohen
+ * @version September 2013
+ */
+public class Bug extends Actor
+{
+    
+    // Instance variables - Class variables
+    private Flower targetFlower;
+    private ArrayList<Flower> flowers;
+    private StatBar hpBar;
+    private int hp;
+    private int maxHP;
+
+    private int mySpeed = 2;
+    private int myAge;
+
+    /**
+     * Primary constructor for Bug - creates a new Bug with full HP.
+     * This is called by the Spawn button, and used for creating the 
+     * first bug at the beginning of the simulation.
+     */
+    public Bug ()
+    {
+        maxHP = DesertWorld.BUG_MAX_HP; 
+        hp = maxHP;
+        hpBar = new StatBar (hp, this);
+        myAge = 0;
+    }
+
+    /**
+     * An additional constructor used specifically for Bugs that are to be
+     * spawned without full hit points (hatched from eggs... hungry!)
+     */
+    public Bug (double percentHealth)
+    {
+        maxHP = DesertWorld.BUG_MAX_HP; 
+        hp = (int) ((double)maxHP * percentHealth); // Assign a percentage of max health
+        hpBar = new StatBar (maxHP, this); // Construct a new HP bar with myself (this)
+                                             // As the target to follow around
+    }
+
+    /**
+     * Method automatically called by Greenfoot when an object of this
+     * class is added to the World
+     * 
+     * @param World This parameter is the World being added to.
+     */
+    public void addedToWorld (World w)
+    {
+        targetClosestFlower();
+        w.addObject (hpBar, getX(), getY());
+        hpBar.update(maxHP);
+    }
+
+    /**
+     * Act - do whatever the Bug wants to do. This method is called whenever
+     * the 'Act' or 'Run' button gets pressed in the environment.
+     */
+    public void act() 
+    {
+        myAge++; // increase my age - used for tracking statistics
+        if (hp > 0)
+        {
+            hp -= DesertWorld.BUG_DEATH_RATE;
+            if (myAge % 8 == 0) // Only run every 8 acts to avoid lag
+            {
+                targetClosestFlower ();
+                hpBar.update(hp);
+            }
+            // If my current target Flower exists, move toward it
+            if (targetFlower != null && targetFlower.getWorld() != null)
+            {
+                moveTowardOrEatFlower();
+            }
+            // If I can't find anything to eat, move in a random direction
+            else
+            {
+                moveRandomly();
+            }
+
+            // If I'm not a newborn, and I manage to get to full HP, lay an egg
+            if (hp >= maxHP && myAge > 100)
+            {
+                layEgg ();
+            }
+        }
+        // Death:
+        else
+        {
+            DesertWorld d = (DesertWorld)getWorld(); // Access the World
+            d.addObject(new DeadBug(), getX(), getY()); // Place a skull in my place
+            d.addDeath(myAge); // Add to stats
+            getWorld().removeObject(this); // Remove myself
+        }
+    }    
+
+    /**
+     * Private method, called by act(), that constantly checks for closer targets
+     */
+    private void targetClosestFlower ()
+    {
+        double closestTargetDistance = 0;
+        double distanceToActor;
+        int numFlowers;
+        // Get a list of all Flowers in the World, cast it to ArrayList
+        // for easy management
+
+        numFlowers = getWorld().getObjects(Flower.class).size();
+        // If any flowers are found
+        if (numFlowers > 50) // If lots of flowers are found, search small area
+        {
+             flowers = (ArrayList)getObjectsInRange(80, Flower.class);
+        }
+        else if (numFlowers > 20) // If less Flowers are found, search wider radius
+        {
+            flowers = (ArrayList)getObjectsInRange(180, Flower.class);
+        }
+        else    // If even fewer Flowers are found, search the whole World
+                flowers = (ArrayList)getWorld().getObjects(Flower.class);
+                
+        if (flowers.size() > 0)
+        {
+            // set the first one as my target
+            targetFlower = flowers.get(0);
+            // Use method to get distance to target. This will be used
+            // to check if any other targets are closer
+            closestTargetDistance = DesertWorld.getDistance (this, targetFlower);
+
+            // Loop through the objects in the ArrayList to find the closest target
+            for (Flower o : flowers)
+            {
+                // Cast for use in generic method
+                Actor a = (Actor) o;
+                // Measure distance from me
+                distanceToActor = DesertWorld.getDistance(this, a);
+                // If I find a Flower closer than my current target, I will change
+                // targets
+                if (distanceToActor < closestTargetDistance)
+                {
+                    targetFlower = o;
+                    closestTargetDistance = distanceToActor;
+                }
+            }
+        }
+    }
+
+    /**
+     * Private method, called by act(), that moves toward the target,
+     * or eats it if within range.
+     */
+    private void moveTowardOrEatFlower ()
+    {
+        turnTowards(targetFlower.getX(), targetFlower.getY());
+
+        
+        if (this.getNeighbours (30, true, Flower.class).size() > 0)
+        {
+            // If I was able to eat, increase by life by flower's nibble power
+            int tryToEat = targetFlower.nibble();
+            if (tryToEat > 0 && hp < maxHP)
+            {
+                hp += tryToEat;
+            }
+        }
+        else
+        {
+            move (mySpeed);
+        }
+    }
+
+    /**
+     * A method to be used for moving randomly if no target is found. Will mostly
+     * just move in its current direction, occasionally turning to face a new, random
+     * direction.
+     */
+    private void moveRandomly ()
+    {
+        if (Greenfoot.getRandomNumber (100) == 50)
+        {
+            turn (Greenfoot.getRandomNumber(360));
+        }
+        else
+            move (mySpeed);
+    }
+
+    /**
+     * Method to spawn an Egg - reduces HP of this Bug by 30%
+     */
+    private void layEgg ()
+    {
+        getWorld().addObject (new Egg (), getX(), getY());
+        // Lose 30% food life when laying an egg
+        hp -= (int)(hp * 0.30);
+    }
+}

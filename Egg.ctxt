@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Egg
+comment0.text=\r\n\ An\ egg\ which\ spawns\ another\ bug.\ Takes\ a\ preset\ number\ of\ acts\ \r\n\ to\ hatch.\ A\ set\ number\ of\ bugs\ will\ be\ spawned\ with\ a\ delay\ in\ \r\n\ between.\ Once\ all\ Bugs\ have\ left\ the\ Egg,\ it\ will\ remove\ itself\r\n\ from\ the\ World.\r\n\ \r\n\ @author\ Jordan\ Cohen\r\n\ @version\ Feb\ 2017\r\n
+comment1.params=
+comment1.target=Egg()
+comment2.params=
+comment2.target=void\ act()
+comment2.text=\r\n\ Act\ -\ do\ whatever\ the\ Egg\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
+numComments=3
