@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Bee
+comment1.params=
+comment1.target=Bee()
+comment2.params=
+comment2.target=void\ increaseSpeed()
+comment3.params=
+comment3.target=void\ act()
+numComments=4

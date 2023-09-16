@@ -107,6 +107,7 @@ public class DesertWorld extends World
         lastAct = -1;
         // Spawn a bug
         spawnBug();
+        //spawnBee();
     }
 
     public void act ()
@@ -178,6 +179,13 @@ public class DesertWorld extends World
         addObject (new Bug (), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(480)+120);
         scoreShowing = true;
     }
+
+    private void spawnBee ()
+    {
+        addObject (new Bee (), Greenfoot.getRandomNumber(800), Greenfoot.getRandomNumber(480)+120);
+        scoreShowing = true;
+    }
+
 
     /**
      * Method to spawn a flower

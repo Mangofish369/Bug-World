@@ -5,21 +5,21 @@ import java.util.Random;
 
 public class Bug extends SuperSmoothMover
 {
-    private static GreenfootImage littleImage;
+    protected static GreenfootImage littleImage;
     
      
     // Instance variables - Class variables
-    private Flower targetFlower;
-    private ArrayList<Flower> flowers;
-    private SuperStatBar energyBar;
-    private int energy;
-    private int maxEnergy;
+    protected Flower targetFlower;
+    protected ArrayList<Flower> flowers;
+    protected SuperStatBar energyBar;
+    protected int energy;
+    protected int maxEnergy;
 
-    private int mySpeed = 2;
-    private int myAge;
-    private int myActNumber;
+    protected int mySpeed = 2;
+    protected int myAge;
+    protected int myActNumber;
 
-    private static int nextActNumber = -1;
+    protected static int nextActNumber = -1;
 
     /**
      * Primary constructor for Bug - creates a new Bug with full HP.
@@ -73,7 +73,7 @@ public class Bug extends SuperSmoothMover
         nextActNumber = 0;
     }
     
-    private static int getNextActNumber () {
+    protected static int getNextActNumber () {
         if (nextActNumber == -1){
             nextActNumber = 0;
         }
@@ -153,7 +153,7 @@ public class Bug extends SuperSmoothMover
     /**
      * Private method, called by act(), that constantly checks for closer targets
      */
-    private void targetClosestFlower ()
+    protected void targetClosestFlower ()
     {
         double closestTargetDistance = 0;
         double distanceToActor;
@@ -202,7 +202,7 @@ public class Bug extends SuperSmoothMover
      * Private method, called by act(), that moves toward the target,
      * or eats it if within range.
      */
-    private void moveTowardOrEatFlower ()
+    protected void moveTowardOrEatFlower ()
     {
         
 
@@ -229,23 +229,28 @@ public class Bug extends SuperSmoothMover
      * just move in its current direction, occasionally turning to face a new, random
      * direction.
      */
-    private void moveRandomly ()
+    protected void moveRandomly ()
     {
         if (Greenfoot.getRandomNumber (100) == 50)
         {
             turn (Greenfoot.getRandomNumber(360));
         }
-        else
+        else{
             move (mySpeed);
+        }
     }
 
     /**
      * Method to spawn an Egg - reduces HP of this Bug by 30%
      */
-    private void layEgg ()
+    protected void layEgg ()
     {
         getWorld().addObject (new Egg (), getX(), getY());
         // Lose 30% food life when laying an egg
         energy -= (int)(energy * 0.30);
+    }
+    
+    protected void getSpeed(){
+        System.out.println(mySpeed);
     }
 }
